@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetch and Insert Value</title>
+</head>
+<body>
+
+<!-- 여기에 값을 삽입할 요소 -->
+<div id="result"></div>
+
+<script>
+// Fetch를 사용하여 데이터를 가져오고, 가져온 데이터를 body의 특정 요소에 삽입하는 함수
+function fetchDataAndInsertValue() {
+    // 현재 URL에서 비밀번호 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const password = urlParams.get('password');
+
+    // 비밀번호가 유효한지 확인
+    if (password === null || password === '') {
+        console.error('Invalid password');
+        return;
+    }
+
+    // 데이터를 가져올 URL 생성
+    const dataUrl =  window.location.origin + password;
+
+    // Fetch를 사용하여 데이터 가져오기
+    fetch(dataUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // 가져온 데이터를 body의 특정 요소에 삽입
+            document.getElementById('result').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+// 페이지 로드 시 데이터 가져오기 함수 실행
+document.addEventListener('DOMContentLoaded', fetchDataAndInsertValue);
+</script>
+
+</body>
+</html>
